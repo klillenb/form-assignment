@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/001-create-sectors.sql
+  - include:
+      file: db/changelog/002-seed-sectors.sql
+  - include:
+      file: db/changelog/003-create-forms.sql
+  - include:
+      file: db/changelog/004-create-form-sectors.sql
