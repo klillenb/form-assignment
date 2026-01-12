@@ -1,0 +1,39 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="max-w-xl mx-auto p-8 mt-6 bg-white rounded-xl shadow-lg space-y-6"
+>
+  <p class="text-lg font-medium text-gray-800">
+    Please enter your name and pick the sectors you are currently involved in.
+  </p>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" type="text" />
+    @if (form.controls.name.touched && form.controls.name.invalid) {
+        <mat-error>Name is required</mat-error>
+    }
+</mat-form-field>
+
+  @if(sectors$ | async; as sectors) {
+    <div class="w-full">
+        <app-dropdown formControlName="sectors" [sectors]="sectors" class="block" />
+        @if (form.controls.sectors.touched && form.controls.sectors.invalid) {
+            <p class="text-sm text-red-600 mt-1">
+                Please select at least one sector
+            </p>
+        }
+    </div>
+  }
+
+  <mat-checkbox class="text-gray-700" formControlName="hasAgreed"> Agree to terms </mat-checkbox>
+  @if (form.controls.hasAgreed.touched && form.controls.hasAgreed.invalid) {
+    <p class="text-sm text-red-600">
+        You must agree to the terms
+    </p>
+  }
+
+  <div class="flex justify-end pt-4">
+    <button mat-raised-button color="primary" class="px-8 py-2 text-base font-medium shadow-md" type="submit">Save</button>
+  </div>
+</form>

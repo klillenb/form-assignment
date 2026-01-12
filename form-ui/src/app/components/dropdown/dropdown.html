@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline" class="w-full">
+  <mat-label>Sectors</mat-label>
+
+  <mat-select [formControl]="selectionControl" multiple panelClass="sector-panel">
+    @for (sector of flattenedSectors; track $index) {
+        <mat-option [value]="sector.id">
+        <span [style.paddingLeft.px]="sector.level * 16">
+            {{ sector.name }}
+        </span>
+        </mat-option>
+    }
+  </mat-select>
+</mat-form-field>

@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { Form } from "./components/form/form";
+import { InputForm } from "./components/form/input-form";
 
 @Component({
   selector: 'app-root',
-  imports: [Form],
+  imports: [InputForm],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
