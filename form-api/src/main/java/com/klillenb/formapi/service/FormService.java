@@ -2,21 +2,19 @@ package com.klillenb.formapi.service;
 
 import com.klillenb.formapi.dto.FormDto;
 import com.klillenb.formapi.dto.SectorDto;
+import com.klillenb.formapi.mapper.FormMapper;
 import com.klillenb.formapi.mapper.SectorMapper;
 import com.klillenb.formapi.model.Form;
 import com.klillenb.formapi.model.FormSector;
 import com.klillenb.formapi.repository.FormRepository;
 import com.klillenb.formapi.repository.FormSectorRepository;
 import com.klillenb.formapi.repository.SectorRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,30 +26,22 @@ public class FormService {
 
     private final FormSectorRepository formSectorRepository;
 
-    private final SectorMapper mapper;
+    private final SectorMapper sectorMapper;
+
+    private final FormMapper formMapper;
 
     public List<SectorDto> findAllSectors() {
         return sectorRepository
                 .findByParentIsNull()
                 .stream()
-                .map(mapper::map)
+                .map(sectorMapper::map)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public Optional<FormDto> getForm() {
-        return formRepository.findAll()
-                .stream()
-                .findFirst()
-                .map(form -> {
-                    List<Long> sectorIds = formSectorRepository.findSectorIdsByFormId(form.getId());
-
-                    return new FormDto()
-                            .setId(form.getId())
-                            .setName(form.getName())
-                            .setHasAgreed(form.isHasAgreed())
-                            .setSectors(sectorIds);
-                });
+        return formRepository.findFirst()
+                .map(formMapper::map);
     }
 
     @Transactional
@@ -77,23 +67,23 @@ public class FormService {
     }
 
     @Transactional
-    public void update(Long id, FormDto dto) {
-        var form = formRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Form not found"));
+    public boolean update(Long id, FormDto dto) {
+        return formRepository.findById(id)
+                .map(form -> {
+                    form.setName(dto.getName())
+                            .setHasAgreed(dto.isHasAgreed());
 
-        form.setName(dto.getName())
-                .setHasAgreed(dto.isHasAgreed());
+                    formSectorRepository.deleteByFormId(id);
 
-        formSectorRepository.deleteByFormId(id);
+                    var selections = dto.getSectors().stream()
+                            .map(sectorId -> new FormSector()
+                                    .setForm(form)
+                                    .setSector(sectorRepository.getReferenceById(sectorId)))
+                            .toList();
 
-        List<FormSector> selections = dto.getSectors()
-                .stream()
-                .map(sectorId -> new FormSector()
-                        .setForm(form)
-                        .setSector(sectorRepository.getReferenceById(sectorId))
-                )
-                .toList();
-
-        formSectorRepository.saveAll(selections);
+                    formSectorRepository.saveAll(selections);
+                    return true;
+                })
+                .orElse(false);
     }
 }

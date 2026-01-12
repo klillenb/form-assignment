@@ -20,31 +20,28 @@ public class FormController {
 
     @GetMapping("/sectors")
     public ResponseEntity<List<SectorDto>> getSectors() {
-        List<SectorDto> sectors = formService.findAllSectors();
-
-        return sectors.isEmpty()
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.ok(sectors);
+        return ResponseEntity.ok(formService.findAllSectors());
     }
 
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody FormDto form) {
         var id = formService.save(form);
+        var location = URI.create("/forms/" + id);
 
-        return ResponseEntity.created(URI.create("/forms/" + id)).build();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping
     public ResponseEntity<FormDto> getForm() {
         return formService.getForm()
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody FormDto form) {
-        formService.update(id, form);
-
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> update(@PathVariable Long id, @Valid @RequestBody FormDto form) {
+        return formService.update(id, form)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

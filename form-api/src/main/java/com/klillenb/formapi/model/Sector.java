@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,9 +15,11 @@ import java.util.List;
 @Entity
 @Table(name = "sectors")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLRestriction("deleted_at IS NULL")
+@Accessors(chain = true)
 public class Sector {
 
     @Id
