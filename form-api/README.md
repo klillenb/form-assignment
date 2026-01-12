@@ -8,7 +8,7 @@
 - Logbook & Logstash for HTTP request/response logging
 
 ## Requirements
-- Java 22 SDK
+- Java 25 SDK
 - Gradle 9+
 
 ## Setup
