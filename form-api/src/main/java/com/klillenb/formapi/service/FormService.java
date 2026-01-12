@@ -40,7 +40,7 @@ public class FormService {
 
     @Transactional(readOnly = true)
     public Optional<FormDto> getForm() {
-        return formRepository.findFirst()
+        return formRepository.findFirstByOrderByIdAsc()
                 .map(formMapper::map);
     }
 

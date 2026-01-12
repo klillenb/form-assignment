@@ -77,7 +77,7 @@ public class FormServiceTest {
                 .setHasAgreed(true)
                 .setSectors(List.of(1L, 2L));
 
-        when(formRepository.findFirst()).thenReturn(Optional.of(form));
+        when(formRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.of(form));
         when(formMapper.map(form)).thenReturn(dto);
 
         Optional<FormDto> result = target.getForm();
@@ -89,7 +89,7 @@ public class FormServiceTest {
 
     @Test
     void getForm_returnsEmpty_whenNoFormExists() {
-        when(formRepository.findFirst()).thenReturn(Optional.empty());
+        when(formRepository.findFirstByOrderByIdAsc()).thenReturn(Optional.empty());
 
         Optional<FormDto> result = target.getForm();
 

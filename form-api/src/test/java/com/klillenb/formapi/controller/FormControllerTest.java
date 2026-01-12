@@ -98,11 +98,12 @@ public class FormControllerTest {
     }
 
     @Test
-    void getForm_returnsNotFound_whenNoForm() throws Exception {
+    void getForm_returnsOk_whenNoForm() throws Exception {
         when(service.getForm()).thenReturn(Optional.empty());
 
         mockMvc.perform(get(FORM_URI))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
     }
 
     @Test

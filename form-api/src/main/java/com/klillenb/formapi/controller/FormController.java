@@ -35,7 +35,7 @@ public class FormController {
     public ResponseEntity<FormDto> getForm() {
         return formService.getForm()
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.ok().body(null));
     }
 
     @PutMapping("/{id}")
