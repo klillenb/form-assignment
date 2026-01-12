@@ -1,7 +1,7 @@
 # Forms API
 
 ## Technologies
-- Java 22
+- Java 25
 - Spring Boot 3.5.9
 - liquibase for DB migrations
 - H2 as in-memory DB (handles schema migration and seeding)
