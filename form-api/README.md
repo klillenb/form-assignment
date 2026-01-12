@@ -1,15 +1,15 @@
-# Forms API
+# Form API
 
 ## Technologies
 - Java 25
 - Spring Boot 3.5.9
-- liquibase for DB migrations
-- H2 as in-memory DB (handles schema migration and seeding)
+- liquibase for DB migrations (handles schema migration and seeding)
+- H2 as in-memory DB
 - Logbook & Logstash for HTTP request/response logging
 
 ## Requirements
 - Java 22 SDK
-- Gradle 8+
+- Gradle 9+
 
 ## Setup
 1. Clone the repo
@@ -34,4 +34,4 @@ Application will start on default port 8080.
 - Add tests for custom queries in repositories.
 - Could add some exception handler for better control.
 - Sectors data is coming from FormController, which currently is fine imo, but if this application were to be extended to add sectors create, update, delete actions, then it would need to be extracted to a separate controller.
-- If the originally provided select tag values in HTML were important and/or have to be kept, then could add new field to sectors table which stores that value. Most likely they represent some kind of ids, but it would be unwise to start hardcoding them in a new system as PKs.
+- If the originally provided select tag value attributes in HTML were important and have to be kept, then could add new field to sectors table which stores that value. Most likely they represent some kind of ids, but it would be unwise to start hardcoding them in a new system as PKs.
